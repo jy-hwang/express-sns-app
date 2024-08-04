@@ -77,7 +77,7 @@
     </div>
 
     <div class="">
-      <form action="/posts/<%= post._id %>/comments">
+      <form action="/posts/<%= post._id %>/comments" method="POST">
         <div class="form-group">
           <input type="text" name="text" class="comment-section" placeholder="댓글을 작성해주세요." required>
           <p class="small ms-2">Enter를 눌러주세요</p>
