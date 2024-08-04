@@ -7,7 +7,7 @@ const mainRouter = express.Router();
 
 mainRouter.get('/', checkAuthenticated, (req, res) => {
   console.log('index 페이지 호출');
-  res.render('index', { title: 'My new Homepage' });
+  res.redirect('/posts');
 });
 
 mainRouter.get('/login', checkNotAuthenticated, (req, res) => {
