@@ -8,9 +8,7 @@ const User = require('../models/users.model');
 const usersRouter = express.Router();
 
 usersRouter.post('/login', async (req, res, next) => {
-  console.log('1');
   passport.authenticate('local', (err, user, info) => {
-    console.log('3'); //왜 두번 찍히는 거지?
     if (err) {
       return next(err);
     }
@@ -23,7 +21,7 @@ usersRouter.post('/login', async (req, res, next) => {
       }
 
       //res.status(200).json({ message: 'Authorized', token: req.user.token });
-      res.redirect('/');
+      res.redirect('/posts');
     });
   })(req, res, next); //middleware 안에 middleware 를 실행하려고 할때.
 });
