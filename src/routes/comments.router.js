@@ -1,5 +1,8 @@
 const express = require('express');
-const { checkAuthenticated } = require('../middleware/auth');
+const {
+  checkAuthenticated,
+  checkCommentOwnerShip,
+} = require('../middleware/auth');
 const router = express.Router({
   mergeParams: true,
 });
@@ -35,6 +38,18 @@ router.post('/', checkAuthenticated, (req, res) => {
     })
     .finally(() => {
       res.redirect('/posts');
+    });
+});
+
+router.delete('/:commentId', checkCommentOwnerShip, (req, res) => {
+  // 댓글을 찾은 후 삭제
+  Comment.findByIdAndDelete(req.params.commentId)
+    .then(() => {})
+    .catch(err => {
+      req.flash('error', '댓글을 삭제 중 오류가 발생했습니다.');
+    })
+    .finally(() => {
+      res.redirect('back');
     });
 });
 

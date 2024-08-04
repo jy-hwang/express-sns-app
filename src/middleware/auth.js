@@ -1,4 +1,5 @@
 const Post = require('../models/posts.model');
+const Comment = require('../models/comments.model');
 
 function checkAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
@@ -28,7 +29,7 @@ function checkPostOwnerShip(req, res, next) {
         }
       })
       .catch(err => {
-        req.flash('error', '포스트가 없거나 에러가 발생했습니다.');
+        req.flash('error', '포스트가 없거나 오류가 발생했습니다.');
         res.redirect('back');
       });
   } else {
@@ -37,8 +38,31 @@ function checkPostOwnerShip(req, res, next) {
   }
 }
 
+function checkCommentOwnerShip(req, res, next) {
+  if (req.isAuthenticated()) {
+    Comment.findById(req.params.commentId)
+      .then(comment => {
+        // 내가 작성한 댓글인지 확인
+        if (comment.author.id.equals(req.user._id)) {
+          next();
+        } else {
+          req.flash('error', '권한이 없습니다.');
+          res.redirect('back');
+        }
+      })
+      .catch(err => {
+        req.flash('error', '댓글을 찾는 도중에 오류가 발생했습니다.');
+        res.redirect('back');
+      });
+  } else {
+    req.flash('error', '로그인이 필요합니다.');
+    res.redirect('/login');
+  }
+}
+
 module.exports = {
   checkAuthenticated,
   checkNotAuthenticated,
   checkPostOwnerShip,
+  checkCommentOwnerShip,
 };
