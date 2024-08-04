@@ -12,12 +12,12 @@ mainRouter.get('/', checkAuthenticated, (req, res) => {
 
 mainRouter.get('/login', checkNotAuthenticated, (req, res) => {
   console.log('signin 페이지 호출');
-  res.render('login');
+  res.render('auth/login');
 });
 
 mainRouter.get('/signup', checkNotAuthenticated, (req, res) => {
   console.log('signup 페이지 호출');
-  res.render('signup');
+  res.render('auth/signup');
 });
 
 module.exports = mainRouter;
