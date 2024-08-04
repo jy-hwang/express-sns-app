@@ -1,6 +1,9 @@
 const express = require('express');
 const multer = require('multer');
-const { checkAuthenticated } = require('../middleware/auth');
+const {
+  checkAuthenticated,
+  checkPostOwnerShip,
+} = require('../middleware/auth');
 const router = express.Router();
 const Post = require('../models/posts.model');
 const path = require('path');
@@ -53,6 +56,24 @@ router.get('/', checkAuthenticated, (req, res) => {
     })
     .catch(err => {
       console.error(err);
+    });
+});
+
+router.get('/:id/edit', checkPostOwnerShip, (req, res) => {
+  res.render('posts/edit', {
+    post: req.post,
+  });
+});
+
+router.put('/:id', checkPostOwnerShip, (req, res) => {
+  Post.findByIdAndUpdate(req.params.id, req.body)
+    .then(post => {
+      req.flash('success', '게시물 수정을 완료했습니다.');
+      res.redirect('/posts');
+    })
+    .catch(err => {
+      req.flash('error', '게시물을 수정하는 중에 오류가 발생했습니다.');
+      res.redirect('/posts');
     });
 });
 

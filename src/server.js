@@ -19,6 +19,7 @@ const serverConfig = config.get('server');
 const port = serverConfig.port;
 
 const flash = require('connect-flash');
+const methodOverride = require('method-override');
 
 require('dotenv').config();
 
@@ -66,6 +67,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 
 app.use(flash());
+app.use(methodOverride('_method'));
 
 app.use((req, res, next) => {
   res.locals.error = req.flash('error');
