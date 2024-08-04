@@ -28,7 +28,7 @@
       <% } %>
     </div>
 
-    <p class="card-text">
+    <p class="card-text mt-2">
       <%= post.description %>
     </p>
 
@@ -37,20 +37,19 @@
     <% } %>
 
     <hr class="mt-1">
-    <div class="collapse show" id="post<% post._id %>">
+    <div class="collapse show" id="post<%= post._id %>">
       <% if (post.comments.length > 0) { %>
       <div class="card-body comment-section">
         <% post.comments.forEach((comment) => { %>
-        <div class="d-flex align-items-center">
           <div class="d-flex justify-content-between">
-            <div class="font-weight-bold">
+            <div class="fw-bold">
               <%= comment.author.username %>
             </div>
             <small>
               <%= comment.createdAt.toDateString() %>
             </small>
           </div>
-          <div class="">
+          <div class="d-flex justify-content-between mt-2">
             <p>
               <%= comment.text %>
             </p>
@@ -70,7 +69,6 @@
             </div>
             <% } %>
           </div>
-        </div>
         <% })%>
       </div>
       <% } %>
