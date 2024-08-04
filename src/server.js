@@ -14,6 +14,10 @@ const postsRouter = require('./routes/posts.router');
 const profileRouter = require('./routes/profile.router');
 const usersRouter = require('./routes/users.router');
 
+const config = require('config');
+const serverConfig = config.get('server');
+const port = serverConfig.port;
+
 require('dotenv').config();
 
 //process.env
@@ -66,10 +70,11 @@ app.use('/posts/:id/like', likesRouter);
 app.use('/posts', postsRouter);
 app.use('/profile/:id', profileRouter);
 
-const config = require('config');
-const serverConfig = config.get('server');
+app.use((err, req, res, next) => {
+  res.status(err.status || 500);
+  res.send(err.message || 'Error Occurred');
+});
 
-const port = serverConfig.port;
 app.listen(port, () => {
   console.log(`Listening on ${port}`);
 });
