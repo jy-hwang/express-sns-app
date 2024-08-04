@@ -6,8 +6,8 @@ const connect = () => {
   }
 
   mongoose
-    .connect('mongodb://localhost:27017', {
-      dbName: 'express-passport-app',
+    .connect(process.env.MONGO_URI, {
+      dbName: process.env.MONGO_DB,
     })
     .then(() => {
       console.log('Connected to MongoDB');

@@ -52,10 +52,10 @@ const userSchema = mongoose.Schema(
     friends: [{ type: String }],
     friendsRequests: [{ type: String }],
   },
-  { timestamp: true },
+  { timestamps: true },
 );
 
-const saltRounds = 10;
+const saltRounds = process.env.SALT_ROUNDS;
 
 userSchema.pre('save', function (next) {
   let user = this;
@@ -73,9 +73,8 @@ userSchema.pre('save', function (next) {
   } else {
     next();
   }
-
-  //const genSalt
 });
+
 userSchema.methods.comparePassword = function (plainPassword, cb) {
   bcrypt.compare(plainPassword, this.password, (err, isMatch) => {
     if (err) return cb(err);
