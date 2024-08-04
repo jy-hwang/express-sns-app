@@ -53,4 +53,34 @@ router.delete('/:commentId', checkCommentOwnerShip, (req, res) => {
     });
 });
 
+router.get('/:commentId/edit', checkCommentOwnerShip, (req, res) => {
+  Post.findById(req.params.id)
+    .then(post => {
+      res.render('comments/edit', {
+        post: post,
+        comment: req.comment,
+      });
+    })
+    .catch(err => {
+      req.flash(
+        'error',
+        '댓글에 해당하는 게시글이 없거나 오류가 발생했습니다.',
+      );
+      res.redirect('back');
+    });
+});
+
+router.put('/:commentId', checkCommentOwnerShip, (req, res) => {
+  Comment.findByIdAndUpdate(req.params.commentId, req.body)
+    .then(comment => {
+      req.flash('success', '댓글을 수정하는 것에 성공했습니다.');
+    })
+    .catch(err => {
+      req.flash('error', '댓글을 수정하는 중 오류가 발생했습니다.');
+    })
+    .finally(() => {
+      res.redirect('/posts');
+    });
+});
+
 module.exports = router;

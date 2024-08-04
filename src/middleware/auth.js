@@ -44,6 +44,7 @@ function checkCommentOwnerShip(req, res, next) {
       .then(comment => {
         // 내가 작성한 댓글인지 확인
         if (comment.author.id.equals(req.user._id)) {
+          req.comment = comment;
           next();
         } else {
           req.flash('error', '권한이 없습니다.');
