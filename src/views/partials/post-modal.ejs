@@ -6,7 +6,7 @@
         <button type="button" class="btn-close close" data-bs-dismiss="modal"></button>
       </div>
       
-      <form method="post" action="/posts" enctype="multipart/form-data">
+      <form method="POST" action="/posts" enctype="multipart/form-data">
         <div class="modal-body">
           <div class="form-group">
             <textarea name="desc" id="desc" class="form-control" rows="6" cols="50" placeholder="<%=currentUser.username%>의 생각을 적어주세요" required></textarea>
