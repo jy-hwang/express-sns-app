@@ -18,6 +18,8 @@ const config = require('config');
 const serverConfig = config.get('server');
 const port = serverConfig.port;
 
+const flash = require('connect-flash');
+
 require('dotenv').config();
 
 //process.env
@@ -27,6 +29,7 @@ app.use(
     keys: [process.env.COOKIE_ENCRYPTION_KEY],
   }),
 );
+
 // register regenerate & save after the cookieSession middleware initialization
 app.use(function (request, response, next) {
   if (request.session && !request.session.regenerate) {
@@ -62,11 +65,18 @@ app.use(express.static(path.join(__dirname, 'public')));
 // 파일 업로드 위치 변경
 app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 
+app.use(flash());
+
+app.use((req, res, next) => {
+  res.locals.error = req.flash('error');
+  res.locals.success = req.flash('success');
+  res.locals.currentUser = req.user;
+  next();
+});
+
+// routes
 app.use('/', mainRouter);
-
-// 사용자 인증
 app.use('/auth', usersRouter);
-
 app.use('/posts/:id/comments', commentsRouter);
 app.use('/friends', friendsRouter);
 app.use('/posts/:id/like', likesRouter);
