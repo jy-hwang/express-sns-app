@@ -6,9 +6,12 @@ const Post = require('../models/posts.model');
 const path = require('path');
 const Comment = require('../models/comments.model');
 
+// 파일 업로드 위치 변경
+const uploadDir = path.join(__dirname, '..', 'uploads', 'images');
+
 const storageEngine = multer.diskStorage({
   destination: (req, file, callback) => {
-    callback(null, path.join(__dirname, '../public/assets/images'));
+    callback(null, uploadDir);
   },
   filename: (req, file, callback) => {
     callback(null, file.originalname);

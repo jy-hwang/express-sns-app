@@ -57,7 +57,10 @@ app.set('view engine', 'ejs');
 // mongodb connection
 connect();
 
+// 정적 파일 제공 설정
 app.use(express.static(path.join(__dirname, 'public')));
+// 파일 업로드 위치 변경
+app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 
 app.use('/', mainRouter);
 
