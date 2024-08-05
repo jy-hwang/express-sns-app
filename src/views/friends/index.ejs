@@ -12,18 +12,18 @@
         <% } else { %>
         <% currentUser.friendsRequests.forEach((friendId) => { %>
         <% const friend = users.find(user => user._id.toString() === friendId) %>
-        <div class="card" style="border:none">
+        <div class="card" style="border:none;">
           <div class="card-body">
             <div class="d-flex justify-content-between">
               <a href="/profile/<%= friendId %>">
                 <p><%= friend.username %></p>
               </a>
               <div class="d-flex">
-                <form action="/friends/<%= friend.id %>/accept-friend-request?_method=POST" class="me-3">
-                  <button class="btn btn-primary btn-sm" type="submit">친구 추가 요청 수락</button>
+                <form action="/friends/<%= friend.id %>/accept-friend-request?_method=PUT" method="POST" class="me-3">
+                  <button class="btn btn-sm btn-primary" type="submit">친구 추가 요청 수락</button>
                 </form>
-                <form action="/friends/<%= friend.id %>/reject-friend-request?_method=POST" class="me-3">
-                  <button class="btn btn-danger">친구 추가 요청 거절</button>
+                <form action="/friends/<%= currentUser._id %>/remove-friend-request/<%= friend.id %>?_method=PUT" method="POST" class="me-3">
+                  <button class="btn btn-sm btn-danger" type="submit">친구 추가 요청 거절</button>
                 </form>
               </div>
             </div>
@@ -46,23 +46,23 @@
 //2. 이미 친구 목록에 있는 사람 제외
 !(currentUser.friends.find(friendId => friendId === user._id.toString())) &&
 //3. 내가 친구 요청받은 목록에 상대방이 있는 경우 제외
-!(currentUser.friendsRequests.find(friendId => friendId === users._id.toString()))
+!(currentUser.friendsRequests.find(friendId => friendId === user._id.toString()))
         ) { %>
-        <div class="card" style="border:none">
+        <div class="card" style="border:none;">
           <div class="card-body">
             <div class="d-flex justify-content-between">
-              <a href="/profile/<%= user.username %>">
+              <a href="/profile/<%= user._id %>">
                 <p><%= user.username %></p>
-                </a>
-                <% if (user.friendsRequests.find(friendId => friendId === currentUser._id.toString())) { %>
-                  <form action="/friends/<%= user.id %>/reject-friend-request/<%= currentUser.id %>?_method=POST" class="ms-auto">
-                    <button class="btn btn-sm btn-danger" type="submit">친구 요청 거절</button>
-                  </form>
-                <% } else { %> 
-                    <form action="/friends/<%= user.id %>/add-friend?_method=POST" class="ms-auto">
-                    <button class="btn btn-sm btn-primary" type="submit">친구 요청</button>
-                  </form>
-                <% } %>
+              </a>
+              <% if (user.friendsRequests.find(friendId => friendId === currentUser._id.toString())) { %>
+              <form action="/friends/<%= user._id %>/remove-friend-request/<%= currentUser._id %>?_method=PUT" method="POST" class="ms-auto">
+                <button class="btn btn-sm btn-danger">친구 요청 취소</button>
+              </form>
+              <% } else { %>
+              <form action="/friends/<%= user._id %>/add-friend?_method=PUT" method="POST" class="ms-auto">
+                <button class="btn btn-sm btn-primary">친구 요청</button>
+              </form>
+              <% } %>
             </div>
           </div>
         </div>
@@ -83,15 +83,15 @@
         <% } else { %>
         <% currentUser.friends.forEach((friendId) => { %>
         <% const friend = users.find(user => user._id.toString() === friendId) %>
-        <div class="card" style="border:none">
+        <div class="card" style="border:none;">
           <div class="card-body">
             <div class="d-flex justify-content-between">
               <a href="/profile/<%= friendId %>">
                 <p><%= friend.username %></p>
               </a>
-                <form action="/friends/<%= friendId%>/reject-friend?_method=PUT" method="POST">
-                  <button class="btn btn-sm btn-danger">친구 취소</button>
-                </form>
+              <form action="/friends/<%= friendId%>/remove-friend?_method=PUT" method="POST">
+                <button class="btn btn-sm btn-danger">친구 취소</button>
+              </form>
             </div>
           </div>
         </div>
@@ -101,6 +101,6 @@
     </div>
   </div>
 
-  </div>
+</div>
 
 <%- include('../partials/footer') %>
