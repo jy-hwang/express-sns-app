@@ -38,4 +38,17 @@ router.get('/edit', checkIsMe, (req, res) => {
   });
 });
 
+router.put('/', checkIsMe, (req, res) => {
+  User.findByIdAndUpdate(req.params.id, req.body)
+    .then(_ => {
+      req.flash('success', '사용자 정보를 수정하는 것에 성공했습니다.');
+      res.redirect('/profile/' + req.params.id);
+    })
+    .catch(err => {
+      console.error(err);
+      req.flash('error', '사용자 정보를 수정하는 것에 실패했습니다.');
+      res.redirect('/back');
+    });
+});
+
 module.exports = router;
