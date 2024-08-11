@@ -1,10 +1,11 @@
 const express = require('express');
-const { checkAuthenticated } = require('../middleware/auth');
+const { checkAuthenticated, checkIsMe } = require('../middleware/auth');
 const router = express.Router({
   mergeParams: true,
 });
 const Post = require('../models/posts.model');
 const User = require('../models/users.model');
+
 router.get('/', checkAuthenticated, (req, res) => {
   Post.find({ 'author.id': req.params.id })
     .populate('comments')
@@ -29,6 +30,12 @@ router.get('/', checkAuthenticated, (req, res) => {
       req.flash('error', '게시물을 가져오는 데에 실패했습니다.');
       res.redirect('/back');
     });
+});
+
+router.get('/edit', checkIsMe, (req, res) => {
+  res.render('profile/edit', {
+    user: req.user,
+  });
 });
 
 module.exports = router;
